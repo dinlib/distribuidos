@@ -1,26 +1,30 @@
 import java.rmi.Naming;
+import java.util.Scanner;
 
 public class Client {
   public static void main(String[] args) {
 
+
     try {
       Matrix m = (Matrix) Naming.lookup("//127.0.0.1:1099/MatrixService");
-      Calculator c = (Calculator) Naming.lookup("//127.0.0.1:1099/CalculatorService");
-
-      System.out.println("Calculator Service");
-      System.out.println(c.sub(10, 2));
-      System.out.println(c.add(10, 2));
-      System.out.println(c.mul(10, 2));
-      System.out.println(c.div(10, 2));
 
       System.out.println("Matrix Service");
-      int[][] a = m.randMatrix(4);
-      int[][] b = m.randMatrix(4);
-      int[][] result = m.matrixMultiplication(a, b, 4);
+      System.out.print("Matrix dimension: ");
+      Scanner sc = new Scanner(System.in);
 
-      m.printMatrix(a, 4);
-      m.printMatrix(b, 4);
-      m.printMatrix(result, 4);
+      while(sc.hasNext()){
+        int d = sc.nextInt();
+        int[][] a = m.randMatrix(d);
+        int[][] b = m.randMatrix(d);
+        int[][] result = m.matrixMultiplication(a, b, d);
+
+        m.printMatrix(a, d);
+        m.printMatrix(b, d);
+        m.printMatrix(result, d);
+
+        System.out.print("Matrix dimension: ");
+      }
+
     }
 
     catch (Exception e){

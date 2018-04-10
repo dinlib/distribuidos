@@ -10,32 +10,37 @@ public class MatrixImpl extends java.rmi.server.UnicastRemoteObject implements M
 
   public int[][] randMatrix(int size) throws java.rmi.RemoteException {
     int[][] m = new int[size][size];
-    Random rand = new Random();
-    for (int i = 0; i < size; i++) {
-      for (int j = 0; j < size; j++) {
-        m[i][j] = rand.nextInt(10);
-      }
+    try{
+      System.out.println("Using MatrixService to request MatrixService1 a randMatrix");
+      MatrixRemote m1 = (MatrixRemote) Naming.lookup("rmi://127.0.0.1:1099/MatrixService1");
+      m = m1.randMatrixRemote(size);
+    }
+    catch(Exception e){
+      e.printStackTrace();
     }
     return m;
   }
 
   public void printMatrix(int[][] m, int size) throws java.rmi.RemoteException {
-    for (int i = 0; i < size; i++) {
-      for (int j = 0; j < size; j++) {
-        System.out.println(m[i][j] + " ");
-      }
-      System.out.println();
+    try{
+      System.out.println("Using MatrixService to request MatrixService1 a printMatrix");
+      MatrixRemote m1 = (MatrixRemote) Naming.lookup("rmi://127.0.0.1:1099/MatrixService1");
+      m1.printMatrixRemote(m, size);
+    }
+    catch(Exception e){
+      e.printStackTrace();
     }
   }
 
   public int[][] matrixMultiplication(int[][] a, int[][] b, int size) throws java.rmi.RemoteException {
     int[][] result = new int[size][size];
-    for (int i = 0; i < size; i++) {
-      for (int j = 0; j < size; j++) {
-        for (int k = 0; k < size; k++){
-          result[i][j] += a[i][k] * b[k][j];
-        }
-      }
+    try{
+      System.out.println("Using MatrixService to request MatrixService1 a matrixMultiplication");
+      MatrixRemote m1 = (MatrixRemote) Naming.lookup("rmi://127.0.0.1:1099/MatrixService1");
+      result = m1.matrixMultiplicationRemote(a, b, size);
+    }
+    catch(Exception e){
+      e.printStackTrace();
     }
     return result;
   }
