@@ -44,4 +44,17 @@ public class MatrixImpl extends java.rmi.server.UnicastRemoteObject implements M
     }
     return result;
   }
+
+  public int[][] matrixAdd(int[][] a, int[][] b, int size) throws java.rmi.RemoteException {
+    int[][] result = new int[size][size];
+    try{
+      System.out.println("Using MatrixService to request MatrixService1 a matrixAdd");
+      MatrixRemote m1 = (MatrixRemote) Naming.lookup("rmi://127.0.0.1:1099/MatrixService1");
+      result = m1.matrixAddRemote(a, b, size);
+    }
+    catch(Exception e){
+      e.printStackTrace();
+    }
+    return result;
+  }
 }

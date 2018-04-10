@@ -40,4 +40,14 @@ public class MatrixImplRemote extends java.rmi.server.UnicastRemoteObject implem
     }
     return result;
   }
+
+  public int[][] matrixAddRemote(int[][] a, int[][] b, int size) throws java.rmi.RemoteException {
+    int[][] result = new int[size][size];
+    for (int i = 0; i < size; i++) {
+      for (int j = 0; j < size; j++) {
+        result[i][j] = a[i][j] + b[i][j];
+      }
+    }
+    return result;
+  }
 }
