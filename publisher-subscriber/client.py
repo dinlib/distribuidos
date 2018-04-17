@@ -4,10 +4,12 @@ def connection(address, port):
     connection.connect((address, int(port)))
     return connection
 
-def send(connection, message):
+def sendmessage(address, port, message):
+    connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    connection.connect((address, int(port)))
     connection.send(message)
 
 def sendReceive(connection, message):
-    send(connection, message)
+    sendmessage(connection, message)
     response = connection.recv(64)
     return response
