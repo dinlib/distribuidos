@@ -5,6 +5,26 @@ import argparse
 import json
 import copy
 
+class bcolors:
+    # HEADER = '\033[95m'
+    # OKBLUE = '\033[94m'
+    # OKGREEN = '\033[92m'
+    # WARNING = '\033[93m'
+    # FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    Red = '\033[91m'
+    Green = '\033[92m'
+    Blue = '\033[94m'
+    Cyan = '\033[96m'
+    White = '\033[97m'
+    Yellow = '\033[93m'
+    Magenta = '\033[95m'
+    Grey = '\033[90m'
+    Black = '\033[90m'
+    Default = '\033[99m'
+
 host = '127.0.0.1'
 i1port = 8091
 i2port = 8092
@@ -24,86 +44,61 @@ ServerSocket = None
 def seeOnList(dataJSON):
     c = None
     if len(intermedList) == 0 :
-        print 'nothing to be subscribed yet'
+        print bcolors.Red + 'nothing to be subscribed yet' + bcolors.ENDC
     else:
-        print '------seeOnList------'
-        print intermedList
+        count = 0
         for l in intermedList:
             if(l['data'] == dataJSON['data']):
-                print 'Someone has interest on this publication'
+                count += 1
+                print bcolors.Yellow + 'Someone has interest on this publication' + bcolors.ENDC
                 if interId == 1:
-                    print 'I2 wants the publication... Sending to I2'
-                    # c = connection(host, s2port)
-                    # sendmessage(c, json.dumps(dataJSON))
+                    print bcolors.White +  'I2 wants the publication... Sending to I2' + bcolors.ENDC
                     sendmessage(host, i2port, json.dumps(dataJSON))
-                    # c.close()
                 elif interId == 2:
                     if l['name'] == 'intermed' and l['id'] == '3':
-                        print 'I3 wants the publication... Sending to I3'
-                        # c = connection(host, i3port)
+                        print bcolors.White +  'I3 wants the publication... Sending to I3' + bcolors.ENDC
                         sendmessage(host, i3port, json.dumps(dataJSON))
                     elif l['name'] == 'subscriber' and l['id'] == '1':
-                        print 'S1 wants the publication... Sending to S1'
-                        # c = connection(host, s1port)
+                        print bcolors.White +  'S1 wants the publication... Sending to S1' + bcolors.ENDC
                         sendmessage(host, s1port, json.dumps(dataJSON))
                     elif l['name'] == 'subscriber' and l['id'] == '2':
-                        print 'S2 wants the publication... Sending to S2'
-                        # c = connection(host, s2port)
+                        print bcolors.White +  'S2 wants the publication... Sending to S2' + bcolors.ENDC
                         sendmessage(host, s2port, json.dumps(dataJSON))
-                    # sendmessage(c, json.dumps(dataJSON))
-                    # c.close            
                 elif interId == 3:
                     if l['name'] == 'intermed' and l['id'] == '2':
-                        print 'I2 wants the publication... Sending to I2'
-                        # c = connection(host, i2port)
+                        print bcolors.White +  'I2 wants the publication... Sending to I2' + bcolors.ENDC
                         sendmessage(host, i2port, json.dumps(dataJSON))
                     elif l['name'] == 'subscriber' and l['id'] == '3':
-                        print 'S3 wants the publication... Sending to S3'
-                        # c = connection(host, s3port)
+                        print bcolors.White +  'S3 wants the publication... Sending to S3' + bcolors.ENDC
                         sendmessage(host, s3port, json.dumps(dataJSON))
-                    # c.close
+        if count == 0:
+            print bcolors.Red + 'No one subscribes this data' + bcolors.ENDC
 
 
 def spreadTheWord(dataJSON):
-    print '------spreadTheWord------'
-    print intermedList
-    print 'I{} said that he subscribes {}... updating the route list'.format(dataJSON['id'], dataJSON['data'])
+    print bcolors.Magenta + 'I{} said that he subscribes {}... updating the route list'.format(dataJSON['id'], dataJSON['data']) + bcolors.ENDC
     intermedList.append(dataJSON) 
     newData = copy.deepcopy(dataJSON)
     if interId == 2:    
         newData['name'] = 'intermed'
         newData['id'] = '2'
         newJSON = json.dumps(newData)
-        # c1 = connection(host, i1port)
         sendmessage(host, i1port, newJSON)
-        # c1.close()
 
 
 def expressIntention(dataJSON):
-    # if interId == 1:
-    print '------expressIntention------'
-    print intermedList
     intermedList.append(dataJSON)
     newData = copy.deepcopy(dataJSON)
-    print 'S{} said that subscribes {}'.format(dataJSON['id'], dataJSON['data'])                
+    print bcolors.Cyan + 'S{} said that subscribes {}'.format(dataJSON['id'], dataJSON['data']) + bcolors.ENDC               
     if interId == 2:    
-        newData['name'] = 'intermed'
-        newData['id'] = '2'
         newJSON = json.dumps(newData)
-        # c1 = connection(host, i1port)
-        # c2 = connection(host, i3port)
         sendmessage(host, i1port, newJSON)
         sendmessage(host, i3port, newJSON)
-        # c1.close()
-        # c2.close()
     elif interId == 3:
         newData['name'] = 'intermed'
         newData['id'] = '3'
         newJSON = json.dumps(newData)
-        # c1 = connection(host, i2port)
         sendmessage(host, i2port, newJSON)
-        # c1.close()
-
 
 intermedList = list()
 if args.intermed[0] == 1:
@@ -123,11 +118,11 @@ while 1:
     data = receive(ServerSocket)
     dataJSON = json.loads(data)
     if dataJSON['name'] == 'publisher':
-        print 'Receiving from {} {} the data {}'.format(dataJSON['name'], dataJSON['id'], dataJSON)
+        print bcolors.Blue + 'Receiving from {} {} the data {}'.format(dataJSON['name'], dataJSON['id'], dataJSON['data']) + bcolors.ENDC
         seeOnList(dataJSON)
     elif dataJSON['name'] == 'intermed':
-        print 'Receiving from {} {} the data {}'.format(dataJSON['name'], dataJSON['id'], dataJSON)
+        print bcolors.Blue + 'Receiving from {} {} the data {}'.format(dataJSON['name'], dataJSON['id'], dataJSON['data']) + bcolors.ENDC
         spreadTheWord(dataJSON)
     elif dataJSON['name'] == 'subscriber':
-        print 'Receiving from {} {} the data {}'.format(dataJSON['name'], dataJSON['id'], dataJSON)
+        print bcolors.Blue + 'Receiving from {} {} the data {}'.format(dataJSON['name'], dataJSON['id'], dataJSON['data']) + bcolors.ENDC
         expressIntention(dataJSON)

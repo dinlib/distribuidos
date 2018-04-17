@@ -3,6 +3,25 @@ from client import connection, sendmessage, sendReceive
 import sys
 import argparse
 import json
+class bcolors:
+    # HEADER = '\033[95m'
+    # OKBLUE = '\033[94m'
+    # OKGREEN = '\033[92m'
+    # WARNING = '\033[93m'
+    # FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    Red = '\033[91m'
+    Green = '\033[92m'
+    Blue = '\033[94m'
+    Cyan = '\033[96m'
+    White = '\033[97m'
+    Yellow = '\033[93m'
+    Magenta = '\033[95m'
+    Grey = '\033[90m'
+    Black = '\033[90m'
+    Default = '\033[99m'
 
 host = '127.0.0.1'
 i1port = 8091
@@ -31,12 +50,10 @@ elif args.publisher[0] == 2:
     pubPort = i3port 
 
 while 1:
-    pubData = raw_input('What to pub with {} ?: '.format(pubName))
-    # pubConnection = connection(host, pubPort)
+    pubData = raw_input(bcolors.BOLD + 'What to pub with {} ?: '.format(pubName) + bcolors.ENDC)
     pubJSON = json.dumps({'name':'publisher', 'id':pubId,'data':pubData})
-    # response = sendReceive(pubConnection, pubJSON)
     sendmessage(host, pubPort, pubJSON)
-    print 'Publishing with {} the data {}'.format(pubName, pubJSON)
-    # print response
+    print 'Publishing with {} the data {}'.format(pubName, pubData)
+
 
 

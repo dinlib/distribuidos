@@ -6,6 +6,27 @@ import argparse
 import json
 import threading
 
+
+class bcolors:
+    # HEADER = '\033[95m'
+    # OKBLUE = '\033[94m'
+    # OKGREEN = '\033[92m'
+    # WARNING = '\033[93m'
+    # FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    Red = '\033[91m'
+    Green = '\033[92m'
+    Blue = '\033[94m'
+    Cyan = '\033[96m'
+    White = '\033[97m'
+    Yellow = '\033[93m'
+    Magenta = '\033[95m'
+    Grey = '\033[90m'
+    Black = '\033[90m'
+    Default = '\033[99m'
+
 host = '127.0.0.1'
 subPort = 0
 subName = ''
@@ -25,7 +46,7 @@ def listenResponse(port):
     while 1:
         data = receive(serverSocket)
         dataJSON = json.loads(data)
-        print 'Hey, i received the data that i have subscribed from {} {}: {}'.format(dataJSON['name'], dataJSON['id'], dataJSON['data']) 
+        print  bcolors.Green + 'Hey, i received the data that i have subscribed from {} {}: {}'.format(dataJSON['name'], dataJSON['id'], dataJSON['data'])  + bcolors.ENDC
     
 
 
@@ -54,8 +75,6 @@ elif args.subscriber[0] == 3:
 t = threading.Thread(target=listenResponse, args=(subServerPort,))
 t.start()
 while 1:  
-    subData = raw_input('What to subscribe with {} ?: '.format(subName))
-    # subConnection = connection(host, subPort)
+    subData = raw_input(bcolors.BOLD + 'What to subscribe with {} ?: '.format(subName) + bcolors.BOLD)
     subJSON = json.dumps({'name':'subscriber', 'id':subId,'data':subData})
-    # sendmessage(subConnection, subJSON)
     sendmessage(host, subPort, subJSON)   
