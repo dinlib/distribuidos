@@ -1,4 +1,7 @@
 # sudo fuser -k 8091/tcp 8092/tcp 8093/tcp 8094/tcp 8095/tcp 8096/tcp
+
+# lsof -i tcp:8091  | grep LISTEN | awk '{print $2}' | xargs kill && lsof -i tcp:8092  | grep LISTEN | awk '{print $2}' | xargs kill && lsof -i tcp:8093  | grep LISTEN | awk '{print $2}' | xargs kill && lsof -i tcp:8094  | grep LISTEN | awk '{print $2}' | xargs kill && lsof -i tcp:8095  | grep LISTEN | awk '{print $2}' | xargs kill && lsof -i tcp:8096  | grep LISTEN | awk '{print $2}' | xargs kill 
+
 # lsof -i tcp:8091  | grep LISTEN | awk '{print $2}' | xargs kill 
 # lsof -i tcp:8092  | grep LISTEN | awk '{print $2}' | xargs kill 
 # lsof -i tcp:8093  | grep LISTEN | awk '{print $2}' | xargs kill 
