@@ -90,7 +90,9 @@ def expressIntention(dataJSON):
     intermedList.append(dataJSON)
     newData = copy.deepcopy(dataJSON)
     print bcolors.Cyan + 'S{} said that subscribes {}'.format(dataJSON['id'], dataJSON['data']) + bcolors.ENDC               
-    if interId == 2:    
+    if interId == 2:
+        newData['name'] = 'intermed'
+        newData['id'] = '2'    
         newJSON = json.dumps(newData)
         sendmessage(host, i1port, newJSON)
         sendmessage(host, i3port, newJSON)
